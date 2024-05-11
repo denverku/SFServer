@@ -168,9 +168,9 @@ namespace Shared
         {
             
             // Begin sending the data to the remote device.
-            //client.BeginSend(packet.ToArray(), 0, packet.Length(), null, packet);
+            client.BeginSend(packet.ToArray(), 0, packet.Length(), 0, null, packet);
             //client.BeginSend(data, 0, data.Length, 0, new AsyncCallback(SendCallback), client);
-            Send(packet.ToArray());
+            //Send(packet.ToArray());
         }
 
         public void Send(byte[] data)

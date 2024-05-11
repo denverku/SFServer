@@ -7,7 +7,7 @@ namespace Game
 {
     internal class Loader
     {
-        static string RootName = "SessionServer";
+        static string RootName = "GameServer";
         static void Main(string[] args)
         {
             Console.Title = RootName;

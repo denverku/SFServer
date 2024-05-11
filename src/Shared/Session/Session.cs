@@ -112,9 +112,22 @@ namespace Shared.Session
         public void SendRaw(byte[] buff)
         {
 
-            Packet packet = new Packet();
-            packet.SetBytes(buff);
-            SendPacket(packet);
+            //Packet packet = new Packet(buff);
+
+            //SendPacket(packet);
+            try
+            {
+                ushort protocolID = BitConverter.ToUInt16(buff, 4);
+                //ushort data = BitConverter.ToUInt16(packet.readableBuffer, 6);
+                LogFactory.GetLog(server.Name).LogInfo($"Sending protocolID {protocolID}.");
+                //LogFactory.GetLog(server.Name).LogInfo($"Sending data {data}");
+            }
+            catch (Exception e)
+            {
+
+            }
+            Packet packet = new Packet(buff);
+            if (packet != null) _packetQueue.Enqueue(packet);
         }
 
         private bool TryDequeuePacket(out Packet packet)
@@ -134,8 +147,9 @@ namespace Shared.Session
                     //packet.Encode();
                     /*if (packet.IsValid || server.Type.Equals(ServerType.Other))
                     {*/
-                        //NetworkStream.BeginWrite(packet.Buffer, 0, packet.Buffer.Length, CompletePacketSend, packet);
-                        NetworkStream.BeginWrite(packet.ToArray(), 0, packet.Length(), CompletePacketSend, packet); 
+                    //NetworkStream.BeginWrite(packet.Buffer, 0, packet.Buffer.Length, CompletePacketSend, packet);
+                    //NetworkStream.BeginWrite(packet.ToArray(), 0, packet.Length(), CompletePacketSend, packet); 
+                    NetworkStream.BeginWrite(packet.ToArray(), 0, packet.Length(), CompletePacketSend, packet);
                     //}
                 }
                 catch (Exception e)
@@ -159,7 +173,7 @@ namespace Shared.Session
         public virtual void OnFinishPacketSent(Packet packet)
         {
             //packet.Buffer = null;
-            packet.Reset();
+            //packet.Reset();
         }
 
         protected virtual void HandlePacket(Packet packet)

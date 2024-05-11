@@ -65,7 +65,7 @@ namespace Session
                         return;
                     case 13: // recieve server name or server list
                         LogFactory.GetLog(name).LogInfo($"Read {packet.ReadShort()}"); // first data
-                        LogFactory.GetLog(name).LogInfo($"Read {packet.ReadLong()}"); // first data
+                        //LogFactory.GetLog(name).LogInfo($"Read {packet.ReadLong()}"); // first data
                         LogFactory.GetLog(name).LogInfo($"Read {packet.ReadShort()}");
                         LogFactory.GetLog(name).LogInfo($"Read {packet.ReadString()}"); // server ip
                         Send(new byte[] { 0x04, 0x00, 0x00, 0x00, 0x16, 0x00, 0x01, 0x00, 0x00, 0x00 });
