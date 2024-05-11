@@ -1,0 +1,127 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using Login.Enum;
+using Login.Model;
+
+using Login.Task;
+using Newtonsoft.Json;
+using Shared;
+using Shared.Model;
+using Shared.Network;
+using Shared.Util;
+using Shared.Util.Log.Factories;
+
+namespace Login.Session
+{
+    public class LoginSession : Shared.Session.Session
+    {
+        //private KickInactiveSession _kickTask;
+        private User _user;
+        public LoginSession(Server server, TcpClient client) : base(server, client)
+        {
+            //_kickTask = new KickInactiveSession(this, server.Scheduler);
+            //server.Scheduler.AddTask(_kickTask, 1, true);
+        }
+        protected override void OnRun(Packet packet)
+        {
+            try
+            {
+               // ushort protocolID = BitConverter.ToUInt16(buffer, 4);
+               // LogFactory.GetLog(server.Name).LogInfo($"dumping packet proto {protocolID}.");
+                
+               // LogFactory.GetLog(server.Name).LogInfo($"\n{NetworkUtil.DumpPacket(buffer, length)}");
+                switch (packet.protocolID)
+                {
+                    case 0: // connected to session
+                        SendRaw(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 });
+                        // OnSFServerConnectReq
+                        SendRaw(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 });
+                        break;
+                    case 10:
+                        SendRaw(new byte[] { 0x05, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                        // OnSFValidationReq
+                        SendRaw(new byte[] { 0x08, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x50, 0xc3, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 });
+                        break;
+                    case 12:
+                        // OnSFGameServerListReq
+                        SendRaw(new byte[] { 0x19, 0x00, 0x00, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x54, 0x65, 0x73, 0x74, 0x20, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x00 });
+                        break;
+                    case 14:
+                        // OnSFGameServerIPReq
+                        SendRaw(new byte[] { 0x0e, 0x00, 0x00, 0x00, 0x0f, 0x00, 0x01, 0x00, 0x00, 0x00, 0x31, 0x32, 0x37, 0x2e, 0x30, 0x2e, 0x30, 0x2e, 0x31, 0x00 });
+                        break;
+                    case 16:
+                        //OnSFProcessingUserCountReq
+                        SendRaw(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x01, 0x00 });
+                        break;
+                    case 18:
+                        // OnSFReloginUserReq
+                        break;
+                    case 20:
+                        // OnSFConnectCloseUserNotice
+                        break;
+                    case 22:
+                        SendRaw(new byte[] { 0x6c, 0x00, 0x00, 0x00, 0x17, 0x00, 0x01, 0x00,
+0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00 });
+                        break;
+                }
+                /*if (protocolID == 0)
+                {
+                    SendRaw(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 });
+                    SendRaw(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 });
+                }
+                if (protocolID == 12)
+                {
+                    //SendRaw(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 });
+                    //SendRaw(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 });
+                }
+                if (protocolID == 16)
+                {
+                    //SendRaw(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 });
+                    //SendRaw(new byte[] { 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00 });
+                }*/
+                base.OnRun(packet);
+            }
+            catch (Exception e)
+            {
+                LogFactory.GetLog(server.Name).LogFatal(e);
+            }
+        }
+
+        protected override void HandlePacket(Packet packet)
+        {
+            
+                
+            base.HandlePacket(packet);
+        }
+
+
+       
+
+        public override void OnFinishPacketSent(Packet packet)
+        {
+            
+            
+           // _kickTask.Inactive = 0;
+            base.OnFinishPacketSent(packet);
+        }
+
+        public User User => _user;
+    }
+}
