@@ -32,6 +32,7 @@ namespace Shared
 
         protected string name = "Base Client";
         protected ushort port = 13008;
+        int retryIntervalMilliseconds = 3000;
         Socket client;
 
         protected Thread thread;
@@ -41,7 +42,7 @@ namespace Shared
 
         }
 
-        public virtual void Start()
+        /*public virtual void Start()
         {
             thread = new Thread(() =>
             {
@@ -75,7 +76,50 @@ namespace Shared
                 }
             });
             thread.Start();
+        }*/
+
+        public virtual void Start()
+        {
+            thread = new Thread(() =>
+            {
+                // Initial connection attempt
+                ConnectWithRetry();
+            });
+            thread.Start();
         }
+
+        private void ConnectWithRetry()
+        {
+            try
+            {
+                LogFactory.GetLog(name).LogInfo("Loading client...");
+                // Establish the remote endpoint for the socket.
+                // The name of the 
+                // remote device is "host.contoso.com".
+                IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+
+                // Create a TCP/IP socket.
+                client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                // Connect to the remote endpoint.
+                client.BeginConnect(remoteEP, new AsyncCallback(ConnectCallback), client);
+                LogFactory.GetLog(name).LogInfo($"Connecting at {ipAddress}:{port}.");
+                //connectDone.WaitOne(); // Wait for connection to complete
+
+                // Once connected, start receiving data
+               
+            }
+            catch (Exception e)
+            {
+                //LogFactory.GetLog(name).LogFatal(e);
+                // Retry connection after a delay
+                Thread.Sleep(retryIntervalMilliseconds);
+                ConnectWithRetry(); // Recursive call for retry
+            }
+        }
+
+
 
         public void Stop()
         {
@@ -92,6 +136,7 @@ namespace Shared
                 // Complete the connection.
                 client.EndConnect(ar);
                 LogFactory.GetLog(name).LogInfo($"Socket connected to {client.RemoteEndPoint.ToString()}.");
+                Receive(client);
                 OnConnected(client);
                 //Console.WriteLine("Socket connected to {0}", client.RemoteEndPoint.ToString());
                 //Receive(client);
@@ -100,7 +145,9 @@ namespace Shared
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                //Console.WriteLine(e.ToString());
+                Thread.Sleep(retryIntervalMilliseconds);
+                ConnectWithRetry(); // Recursive call for retry
             }
         }
 

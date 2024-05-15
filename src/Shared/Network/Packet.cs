@@ -13,80 +13,34 @@ using Newtonsoft.Json.Linq;
 
 namespace Shared.Network
 {
-    public class Packet : IDisposable
+    public class Packet
     {
         private List<byte> buffer;
         public byte[] readableBuffer;
         private int readPos;
         private int writePos = 6;
         public int protocolID = 0;
-        /// <summary>Creates a new empty packet (without an ID).</summary>
+        
         public Packet()
         {
             buffer = new List<byte>(); // Initialize buffer
             readPos = 6; // Set readPos to 0
         }
 
-        /// <summary>Creates a new packet with a given ID. Used for sending.</summary>
-        /// <param name="_id">The packet ID.</param>
+        
         public Packet(int _id)
         {
             buffer = new List<byte>(); // Initialize buffer
             readPos = 6; // Set readPos to 0
-                         // Write(_id); // Write packet id to the buffer
-                         //Array.Clear(buffer, 0, buffer.Length);
-                         //BitConverter.GetBytes(protocolID).CopyTo(buffer, 4);
-            /*for (int i = 0; i < readPos; i++)
-            {
-                if (i == 4)
-                {
-
-                    //buffer.AddRange(BitConverter.GetBytes(_id));
-                    buffer.Add(Convert.ToByte(_id));
-                }
-                else
-                {
-                    // buffer.Add(0x00);
-                    buffer.Add(Convert.ToByte(0));
-                }
-            }*/
-            //WriteProtocol(Convert.ToByte(_id));
-            //buffer.AddRange(new byte[7]);
-
+            //WriteInt(_id);
+            buffer.Add((byte)(_id));
         }
 
-        public Packet(byte id)
-        {
-            buffer = new List<byte>(); // Initialize buffer
-            readPos = 6; // Set readPos to 0
-                         // Write(_id); // Write packet id to the buffer
-                         //Array.Clear(buffer, 0, buffer.Length);
-                         //BitConverter.GetBytes(protocolID).CopyTo(buffer, 4);
-            /*for (int i = 0; i < readPos; i++)
-            {
-                if (i == 4)
-                {
-
-                    //buffer.AddRange(BitConverter.GetBytes(_id));
-                    buffer.Add(id);
-                }
-                else
-                {
-                    // buffer.Add(0x00);
-                    buffer.Add(Convert.ToByte(0));
-                }
-            }*/
-            //buffer.AddRange(new byte[7]);
-            
-        }
-
-        /// <summary>Creates a packet from which data can be read. Used for receiving.</summary>
-        /// <param name="_data">The bytes to add to the packet.</param>
+        
         public Packet(byte[] _data)
         {
             buffer = new List<byte>(); // Initialize buffer
             readPos = 6; // Set readPos to 0
-
             SetBytes(_data);
         }
 
@@ -98,8 +52,7 @@ namespace Shared.Network
         }
 
         #region Functions
-        /// <summary>Sets the packet's content and prepares it to be read.</summary>
-        /// <param name="_data">The bytes to add to the packet.</param>
+        
         public void SetBytes(byte[] _data)
         {
             Write(_data);
@@ -107,40 +60,38 @@ namespace Shared.Network
             protocolID = BitConverter.ToUInt16(readableBuffer, 4);
         }
 
-        /// <summary>Inserts the length of the packet's content at the start of the buffer.</summary>
+        
         public void WriteLength()
         {
             buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
         }
 
-        /// <summary>Inserts the given int at the start of the buffer.</summary>
-        /// <param name="_value">The int to insert.</param>
+        
         public void InsertInt(int _value)
         {
             buffer.InsertRange(0, BitConverter.GetBytes(_value)); // Insert the int at the start of the buffer
         }
 
-        /// <summary>Gets the packet's content in array form.</summary>
+        
         public byte[] ToArray()
         {
             readableBuffer = buffer.ToArray();
             return readableBuffer;
         }
 
-        /// <summary>Gets the length of the packet's content.</summary>
+        
         public int Length()
         {
             return buffer.Count; // Return the length of buffer
         }
 
-        /// <summary>Gets the length of the unread data contained in the packet.</summary>
+        
         public int UnreadLength()
         {
             return Length() - readPos; // Return the remaining length (unread)
         }
 
-        /// <summary>Resets the packet instance to allow it to be reused.</summary>
-        /// <param name="_shouldReset">Whether or not to reset the packet.</param>
+        
         public void Reset(bool _shouldReset = true)
         {
             if (_shouldReset)
@@ -161,63 +112,44 @@ namespace Shared.Network
             buffer.AddRange(_value);
         }
 
-        public void WriteProtocol(ushort protocolID)
+        public void WriteByte(byte _value)
         {
-            EnsureCapacity(6); // Ensure buffer has at least 6 elements
-            WriteUShort(protocolID, 4); // Write protocol at index 4
+            buffer.Add(_value);
         }
 
-        public void WriteByte(byte value)
+        public void WriteShort(short _value)
         {
-            EnsureCapacity(writePos + 1); // Ensure buffer has enough capacity
-            buffer[writePos] = value;
-            writePos++;
+            byte leastSignificantByte = (byte)(_value & 0xFF);
+            buffer.Add(leastSignificantByte);
+            //buffer.Add(Convert.ToByte(_value));
+            //buffer.AddRange(BitConverter.GetBytes(_value));
         }
 
-        public void WriteShort(short value)
+        /*public void WriteInt(int _value)
         {
-            EnsureCapacity(writePos + 2); // Ensure buffer has enough capacity
-            buffer[writePos] = (byte)(value & 0xFF);
-            buffer[writePos + 1] = (byte)((value >> 8) & 0xFF);
-            writePos += 2;
+            byte leastSignificantByte = (byte)(_value & 0xFF);
+            buffer.Add(leastSignificantByte);
+            //buffer.Add(Convert.ToByte(_value));
+            //buffer.AddRange(BitConverter.GetBytes(_value));
+        }*/
+        public void WriteInt(int _value)
+        {
+            buffer.Add((byte)(_value));
         }
 
-        public void WriteInt(int value)
+        public void WriteBool(bool _value)
         {
-            EnsureCapacity(writePos + 4); // Ensure buffer has enough capacity
-            buffer[writePos] = (byte)(value & 0xFF);
-            buffer[writePos + 1] = (byte)((value >> 8) & 0xFF);
-            buffer[writePos + 2] = (byte)((value >> 16) & 0xFF);
-            buffer[writePos + 3] = (byte)((value >> 24) & 0xFF);
-            writePos += 4;
+            //buffer.AddRange(BitConverter.GetBytes(_value));
+            buffer.Add(_value == true ? (byte)1 : (byte)0);
         }
 
-        public void WriteString(string value)
+        public void WriteString(string _value)
         {
-            byte[] stringBytes = System.Text.Encoding.UTF8.GetBytes(value);
-            WriteShort((short)stringBytes.Length);
-            EnsureCapacity(writePos + stringBytes.Length); // Ensure buffer has enough capacity
-            Array.Copy(stringBytes, 0, buffer.ToArray(), writePos, stringBytes.Length);
-            writePos += stringBytes.Length;
+            //WriteInt(_value.Length); // Add the length of the string to the packet
+            //buffer.AddRange(Encoding.ASCII.GetBytes(_value)); // Add the string itself
+            byte[] argEncoded = System.Text.Encoding.Default.GetBytes(_value);
+            buffer.AddRange(argEncoded);
         }
-
-        private void WriteUShort(ushort value, int index)
-        {
-            EnsureCapacity(index + 2); // Ensure buffer has enough capacity
-            buffer[index] = (byte)(value & 0xFF);
-            buffer[index + 1] = (byte)((value >> 8) & 0xFF);
-        }
-
-        private void EnsureCapacity(int requiredCapacity)
-        {
-            if (buffer.Count < requiredCapacity)
-            {
-                int additionalCapacity = requiredCapacity - buffer.Count;
-                buffer.AddRange(new byte[additionalCapacity]);
-            }
-        }
-
-
 
 
         #region Read Data
@@ -393,27 +325,5 @@ namespace Shared.Network
 
         #endregion
 
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool _disposing)
-        {
-            if (!disposed)
-            {
-                if (_disposing)
-                {
-                    buffer = null;
-                    readableBuffer = null;
-                    readPos = 0;
-                }
-
-                disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 }

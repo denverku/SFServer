@@ -43,6 +43,11 @@ namespace Game.Session
             handler.Add(new OnSFLocationReq());
             handler.Add(new OnSFUserLocationReq());
             handler.Add(new OnSFChangeGameMapReq());
+            handler.Add(new OnSFChangeCountryReq());
+            handler.Add(new OnSFChangeThirdViewReq());
+            handler.Add(new OnSFChangeEnemyViewReq());
+            handler.Add(new OnSFChangeGameTypeReq());
+            handler.Add(new OnSFChangeIntrudeReq());
 
             handler.Add(new OnSFGameGuardAuthReq());
             handler.Add(new OnSFEnterForceSettingReq());
@@ -246,28 +251,7 @@ namespace Game.Session
                         //User::OnSFSaveWebItemWareDataReq(this, &packet);
                         break;
                     
-                    case 1304:
-                        //User::OnSFChangeThirdViewReq(this, &packet);
-
-                        break;
-                    case 1306: // 
-                        //User::OnSFChangeEnemyViewReq(this, &packet);
-                        break;
-                    case 1308:
-                        //User::OnSFChangeGameTypeReq(this, &packet);
-                        break;
-                    case 1310:
-                        //User::OnSFChangeVictoryConditionReq(this, &packet);
-                        break;
-                    case 1312:
-                        //User::OnSFChangeCountryReq(this, &packet);
-                       // SendRaw(new byte[] { 0x05, 0x00, 0x00, 0x00, 0x26, 0x02, 0xa3, 0x06, 0xf8, 0x03, 0x00});
-                       // SendRaw(new byte[] { 0x01, 0x00, 0x00, 0x00, 0xf6, 0x01, 0x34 });
-                        break;
-                    case 1314: // when i change mode also free join on/off
-                       // User::OnSFChangeIntrudeReq(this, &packet);
-
-                        break;
+                   
 
                     case 8003: // load gift tab in inventory
                         
@@ -326,21 +310,7 @@ namespace Game.Session
 
         public override void OnFinishPacketSent(Packet packet)
         {
-            /*switch (packet.Pid())
-            {
-                case AuthToChannelServerPacket.NetworkId:
-                    Internet.Get("http://localhost:3000/", $"battle/statistics/{User.Id}", result =>
-                    {
-                        BattleData data = JsonConvert.DeserializeObject<BattleData>(result);
-                        if (data != null)
-                        {
-                            PlayerDataPacket p = new PlayerDataPacket { User = User, Statistics = data.Statistics };
-                            SendPacket(p);
-                        }
-                    }, error => {});
-                    break;
-            }
-            */
+            
             base.OnFinishPacketSent(packet);
         }
 
