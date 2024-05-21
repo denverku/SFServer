@@ -22,6 +22,9 @@ namespace Game
                 LoginServer server2 = new LoginServer(args);
                 LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the login server session..");
                 server2.Start();
+                //MsgServer test = new MsgServer(args);
+                //LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the login server session..");
+                //test.Start();
                 //ClanChatServer server3 = new ClanChatServer(args);
                 //LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the clanchat server session..");
                 //server3.Start();

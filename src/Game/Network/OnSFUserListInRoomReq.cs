@@ -19,10 +19,10 @@ namespace Game.Network
 
             // i think this is for indication of server/channel/room no. yeah correct
             //session.SendRaw(new byte[] { 0x03, 0x00, 0x00, 0x00, 0x2f, 0x01, 0x01, 0x7e, 0x00 });
-           // session.SendRaw(new byte[] { 0x03, 0x00, 0x00, 0x00, 0x2f, 0x01, 0x02, 0x21, 0x00 }); // from sfrush // server indication
+            // session.SendRaw(new byte[] { 0x03, 0x00, 0x00, 0x00, 0x2f, 0x01, 0x02, 0x21, 0x00 }); // from sfrush // server indication
 
 
-            Packet roomInfo = new Packet(new byte[] { 0x3d, 0x00, 0x00, 0x00, 0x31, 0x01, 0x01, 0x00,
+            /*Packet roomInfo = new Packet(new byte[] { 0x3d, 0x00, 0x00, 0x00, 0x31, 0x01, 0x01, 0x00,
 0x93, 0x01, 0x54, 0x72, 0x75, 0x6e, 0x6b, 0x73,
 0x4e, 0x67, 0x61, 0x00, 0x00, 0x00, 0x00, 0x4e,
 0x00, 0x00, 0x01, 0x05, 0x04, 0x00, 0x00, 0x00,
@@ -33,7 +33,7 @@ namespace Game.Network
 0x01, 0x00, 0x00 });
 
             roomInfo.Dump();
-            session.SendPacket(roomInfo);
+            session.SendPacket(roomInfo);*/
             /*session.SendRaw(new byte[] { 0x41, 0x00, 0x00, 0x00, 0x31, 0x01, 0x01, 0x00,
   0x76, 0x07, 0x54, 0x72, 0x75, 0x6e, 0x6b, 0x73,
   0x4b, 0x75, 0x32, 0x32, 0x00, 0x00, 0x00, 0x00,
@@ -48,96 +48,65 @@ namespace Game.Network
             /*session.SendRaw(new byte[] {0x3c, 0x00, 0x00, 0x00, 0x31, 0x01, 0x01, 0x00,
 0x43, 0x07, 0x57, 0x61, 0x73, 0x73, 0x61, 0x62,
 0x79, 0x79, 0x00, 0x00, 0x00, 0x00, 0x4e, 0x00,
-0x00, 0x01, 0x05, 0x04, 0x00, 0x00, 0x00, 0x00,
-0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,
-0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x01, 0x05, 0x04, 0x05, 0x00, 0x00, 0x00, // first line rank
+0x00, 0x00, 0x00, 0x00, 0x03, 0x01, 0x01, 0x01,
+0x07, 0x09, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00,
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x00, 0x30, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x01,
 0x00, 0x00});*/
 
+            session.SendRaw(new byte[] {0x3c, 0x00, 0x00, 0x00, 0x31, 0x01, 0x01, 0x00,
+0x43, 0x07, 0x57, 0x61, 0x73, 0x73, 0x61, 0x62,
+0x79, 0x79, 0x00, 0x00, 0x00, 0x00, 0x4e, 0x00,
+0x00, 0x01, 0x05, 0x04, 0x05, 0x00, 0x00, 0x00, // first line rank
+0x00, 0x00, 0x00, 0x00, 0x03, 0x01, 0x01, 0x01,
+0x07, 0x09, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+0x00, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x01,
+0x00, 0x00});
+
+           
             /*Packet data = new Packet(305);
-            data.WriteByte(0x01);
-
-            data.WriteByte(0x01); 
-            data.WriteByte(0x00);
-            data.WriteByte(0x07); // map
-            data.WriteInt(5);
-            
-            data.WriteString("Wassabyy");
-            data.WriteByte(0x00);
-            data.WriteByte(0x00);
-            data.WriteByte(0x00);
-            data.WriteByte(0x00);
-            data.WriteString("N");
-            data.WriteInt(0);
-            data.WriteInt(0);
+            //data.WriteByte(1);
             data.WriteInt(1);
-            data.WriteInt(5);
-            data.WriteInt(4);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(1);
-            data.WriteInt(1);
-            data.WriteInt(1);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteByte(0x30);
-            data.WriteInt(0);
-            data.WriteInt(07);
-            data.WriteByte(0x00);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(0);
-            data.WriteInt(1);
-            data.WriteInt(1);
-            data.WriteLength();
-            data.Dump();
-            session.SendPacket(data);*/
-
-            /*Packet data = new Packet(305);
-            data.WriteByte(1);
-
             data.WriteInt(1); // count player in room
             data.WriteInt(2); // position 
-            data.WriteString("N");
-            data.WriteInt(1); // team kills rate
             
+            data.WriteInt(0); 
+            data.WriteInt(0);
             data.WriteString("hello");
-            data.WriteInt(0); // rank?
-            data.WriteInt(0); // rank?
-            data.WriteInt(0); // rank?
-            data.WriteInt(0);
+            data.WriteInt(0); // space idk
+            data.WriteInt(0); // dont change the value it will crash
+            data.WriteInt(0);  // crash
+            data.WriteInt(0); // crash
 
-            data.WriteInt(0); // team kill?
+            data.WriteInt(1); // idk but not crash
+            data.WriteInt(0); // crash here
+            data.WriteInt(2); // rank
+            data.WriteInt(1); // idk
+            data.WriteInt(1); // idk
+            data.WriteInt(1); // idk
+            data.WriteInt(5); // team kills
+            data.WriteInt(0); // nawala butas sa rank xd
             data.WriteInt(0);
             data.WriteInt(0);
             data.WriteInt(0);
+            data.WriteInt(0); 
+
             data.WriteInt(1);
-            data.WriteInt(0);
-            data.WriteInt(1);
-            data.WriteLength();
+            data.WriteInt(0); 
+            data.WriteInt(5); // disconnect rate percent
+
+            data.WriteInt(1); // it make the player status ready when 0
+            data.WriteInt(1); // it make the player status playing when i set 3
+            data.WriteInt(5); //idk
+            data.WriteInt(7); // gametype // 7 training
+            data.WriteInt(10); // game win
+            data.WriteInt(1); // 3rd pov on/off
+            data.WriteInt(1); // spectate team/all
+            data.WriteInt(1); // free join on/off
+            data.WriteInt(5); // map
+
             data.Dump();
             session.SendPacket(data);*/
 
@@ -151,9 +120,9 @@ namespace Game.Network
 0xcc, 0x4a, 0x59, 0x33, 0x3a, 0x7d, 0x07, 0x72,
 0xc0, 0x80, 0xcb, 0x62, 0x0d, 0xce, 0x3c, 0x28,
 0xa5, 0x23, 0xf6, 0xa1, 0xcc, 0x58, 0xef, 0x26,
-0x76, 0xf6, 0xbb, 0x91, 0xf1, 0x41 });
+0x76, 0xf6, 0xbb, 0x91, 0xf1, 0x41 });*/
 
-            Packet packetgame = new Packet(new byte[]
+            /*Packet packetgame = new Packet(new byte[]
             {
                 0x04, 0x00, 0x00, 0x00, 0x04, 0x02, 0x01, 0x93,
 0x01, 0x02, 0x18, 0x00, 0x00, 0x00, 0x6b, 0x02,
@@ -209,8 +178,8 @@ namespace Game.Network
 0x08, 0x00, 0x00, 0x00, 0x5f, 0x02, 0x02, 0x01,
 0x01, 0x00, 0x12, 0x48, 0x08, 0x00
             });
-            packetgame.Dump();
-            session.SendPacket(packetgame);*/
+            packetgame.Dump();*/
+            //session.SendPacket(packetgame);
 
         }
 

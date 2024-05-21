@@ -33,7 +33,12 @@ namespace Shared.Network
             buffer = new List<byte>(); // Initialize buffer
             readPos = 6; // Set readPos to 0
             //WriteInt(_id);
+            buffer.Add((byte)(0));
+            buffer.Add((byte)(0));
+            buffer.Add((byte)(0));
+            buffer.Add((byte)(0));
             buffer.Add((byte)(_id));
+
         }
 
         
@@ -132,9 +137,11 @@ namespace Shared.Network
             //buffer.Add(Convert.ToByte(_value));
             //buffer.AddRange(BitConverter.GetBytes(_value));
         }*/
-        public void WriteInt(int _value)
+        public void WriteInt(int value)
         {
-            buffer.Add((byte)(_value));
+            buffer.Add((byte)(value));
+            //byte[] bytes = BitConverter.GetBytes(value);
+            //buffer.AddRange(bytes);
         }
 
         public void WriteBool(bool _value)
@@ -149,6 +156,7 @@ namespace Shared.Network
             //buffer.AddRange(Encoding.ASCII.GetBytes(_value)); // Add the string itself
             byte[] argEncoded = System.Text.Encoding.Default.GetBytes(_value);
             buffer.AddRange(argEncoded);
+            //buffer.Add((byte)(_value.Length));
         }
 
 

@@ -89,9 +89,9 @@ namespace Shared.Session
         {
             try
             {
-                //ushort protocolID = BitConverter.ToUInt16(packet.readableBuffer, 4);
+                ushort protocolID = BitConverter.ToUInt16(packet.readableBuffer, 4);
                 //ushort data = BitConverter.ToUInt16(packet.readableBuffer, 6);
-                LogFactory.GetLog(server.Name).LogInfo($"Sending protocolID {packet.protocolID}.");
+                LogFactory.GetLog(server.Name).LogInfo($"Sending protocolID {protocolID}.");
                 //LogFactory.GetLog(server.Name).LogInfo($"Sending data {data}");
             }catch(Exception e)
             {

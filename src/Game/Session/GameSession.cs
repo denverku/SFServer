@@ -161,8 +161,10 @@ namespace Game.Session
                         break;
                    
                     
-                    case 214: // OnSFConnectionReq
-
+                    case 214: // OnSFEnterRoomReq
+                        SendRaw(new byte[] {0x10, 0x00, 0x00, 0x00, 0xd7, 0x00, 0x44, 0x03,
+0x18, 0xfa, 0x52, 0x6c, 0x2e, 0xf5, 0x96, 0x4a,
+0x94, 0x0e, 0x89, 0x35, 0x2e, 0x77}); 
                         break;
                     case 216: // OnSFQuickJoinReq
                         break;
