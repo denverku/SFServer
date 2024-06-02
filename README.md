@@ -18,3 +18,6 @@ Below is the data to perform the authentication.
 | |LOGIN|PASSWORD|
 |---|---|---|
 |Account|`tkstudio21`|`test`
+
+Join on discord for more info
+https://discord.gg/a7NDaHjt63
