@@ -15,7 +15,7 @@ namespace Shared
     public class Server
     {
         protected string name = "Base Server";
-       // protected ServerType type = ServerType.Unknown;
+        // protected ServerType type = ServerType.Unknown;
         protected int maxConnections = 500;
         //protected string token = "Zetta@123";
         protected string address = "127.0.0.1";
@@ -36,39 +36,43 @@ namespace Shared
             commandMap = new SimpleCommandMap();
             commandProcessor = new CommandProcessor(this, commandMap);
         }
-        
+
         public virtual void Start()
         {
-            thread = new Thread(() =>
+            /*thread = new Thread(() =>
+            {*/
+            //Thread.CurrentThread.Name = name;
+            LogFactory.GetLog(name).LogInfo("Loading server...");
+            try
             {
-                //Thread.CurrentThread.Name = name;
-                LogFactory.GetLog(name).LogInfo("Loading server...");
-                try {
-                    IPAddress ipAddress = IPAddress.Parse(address);
-                    TcpListener server = new TcpListener(ipAddress, port);
-                    
-                    server.Start();
-                    LogFactory.GetLog(name).LogInfo($"Listening at {ipAddress}:{port}.");
-                    while (IsAlive)
+                IPAddress ipAddress = IPAddress.Parse(address);
+                TcpListener server = new TcpListener(ipAddress, port);
+
+                server.Start();
+                server.BeginAcceptTcpClient(OnReceiveConnection, server);
+                LogFactory.GetLog(name).LogInfo($"Listening at {ipAddress}:{port}.");
+                /*while (IsAlive)
+                {
+                    if (_currentTick % _tickRate == 0)
                     {
-                        if (_currentTick % _tickRate == 0)
+                        if (server.Pending())
                         {
-                            if (server.Pending())
-                            {
-                                server.BeginAcceptTcpClient(OnReceiveConnection, server);
-                            }
-                        }
-                        else
-                        {
-                            _currentTick++;
-                            Thread.Sleep(1000 * (1 / _tickRate));
+                            server.BeginAcceptTcpClient(OnReceiveConnection, server);
                         }
                     }
-                } catch (IOException e) {
-                    LogFactory.GetLog(name).LogFatal(e);
-                }
-            });
-            thread.Start();
+                    else
+                    {
+                        _currentTick++;
+                        Thread.Sleep(1000 * (1 / _tickRate));
+                    }
+                }*/
+            }
+            catch (IOException e)
+            {
+                LogFactory.GetLog(name).LogFatal(e);
+            }
+            /*});
+            thread.Start();*/
             _alive = true;
             scheduler.Start();
             commandProcessor.Start();
@@ -78,7 +82,7 @@ namespace Shared
         {
             try
             {
-                TcpListener server = (TcpListener) ar.AsyncState;
+                TcpListener server = (TcpListener)ar.AsyncState;
                 if (server != null) OnRun(server.EndAcceptTcpClient(ar));
             }
             catch (Exception e)
@@ -92,7 +96,7 @@ namespace Shared
             LogFactory.GetLog(name).LogWarning($"STOP RECEIVED, CLOSED ALL SESSIONS [{sessions.Count}].");
             for (int i = 0; i < sessions.Count; i++)
             {
-                ((Session.Session) sessions[i])?.Close();
+                ((Session.Session)sessions[i])?.Close();
             }
             thread.Interrupt();
             LogFactory.GetLog(name).LogWarning("ALL SESSIONS HAS BEEN CLOSED AND SERVER STOPPED.");
@@ -101,16 +105,17 @@ namespace Shared
 
         public virtual void OnRun(TcpClient client)
         {
-            
+
         }
 
-        public virtual string GetServerInfo() {
+        public virtual string GetServerInfo()
+        {
             return $"Sessions: {sessions.Count} of {maxConnections}.";
         }
-        
+
         public virtual void RegisterDefaultSchedulers()
         {
-           // scheduler.AddTask(new ServerInformationToConsoleTask(scheduler), 5, true);
+            // scheduler.AddTask(new ServerInformationToConsoleTask(scheduler), 5, true);
         }
 
         public string Name
@@ -147,7 +152,7 @@ namespace Shared
             set => commandMap = value;
         }
 
-        
+
 
         public bool IsAlive => _alive;
 

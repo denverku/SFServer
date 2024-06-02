@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Shared;
 using Shared.Model;
 using Shared.Network;
+using Shared.Session;
 using Shared.Util;
 using Shared.Util.Log.Factories;
 
@@ -25,13 +26,13 @@ namespace Game.Session
             
             byte[] ba = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x63, 0x00 };
             SendRaw(ba);
-
-
-
+            
             handler.Add(new OnSFConnectionReq());
             handler.Add(new OnSFSendUserDataReq());
             handler.Add(new OnSFGetDBDataReq());
             handler.Add(new OnSFUDPDataStoreReq());
+
+            handler.Add(new OnSFCheckBalanceReq());
 
             handler.Add(new OnSFUserListInChannelReq());
             handler.Add(new OnSFChannelListReq());
@@ -52,9 +53,11 @@ namespace Game.Session
             handler.Add(new OnSFGameGuardAuthReq());
             handler.Add(new OnSFEnterForceSettingReq());
 
+            handler.Add(new OnSFRoomListReq());
             handler.Add(new OnSFRoomInfoInChannelReq());
 
             handler.Add(new OnSFUpdateNewUserFlagReq());
+            handler.Add(new OnSFSaveBasicCharacterInDBReq());
             handler.Add(new OnSFSaveSystemSpecReq());
             handler.Add(new OnSFSaveNickNameReq());
             handler.Add(new OnSFCheckOverlapNickNameReq());
@@ -67,6 +70,7 @@ namespace Game.Session
 
             handler.Add(new OnSFEndClientLoadingReq());
             handler.Add(new OnSFExitGameServerReq());
+            handler.Add(new OnSFExitGameReq());
         }
 
         protected override void OnRun(Packet packet)
@@ -173,8 +177,7 @@ namespace Game.Session
                         break;
                     case 219: // OnSFConnectionReq
                         break;
-                    case 220: // OnSFSaveBasicCharacterInDBReq
-                        break;
+                    
                     case 222: // OnSFLoadGeneralPurposeData
                         // test data
                         SendRaw(new byte[] { 0x04, 0x00, 0x00, 0x00, 0xbf, 0x04, 0x00, 0x00, 0x00, 0x00 });
@@ -232,7 +235,7 @@ namespace Game.Session
                         //User::OnSFRepairItemReq(this, &packet);
                         break;
                     case 1214: // OnSFCheckBalanceReq
-                        SendRaw(new byte[] { 0x04, 0x00, 0x00, 0x00, 0xbf, 0x04, 0x00, 0x00, 0x00, 0x00 });
+                        //SendRaw(new byte[] { 0x04, 0x00, 0x00, 0x00, 0xbf, 0x04, 0x00, 0x00, 0x00, 0x00 });
                         break;
                     case 1216:
                         //User::OnSFBuyCashItemReq(this, &packet);

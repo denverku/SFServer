@@ -33,10 +33,10 @@ namespace Shared.Network
             buffer = new List<byte>(); // Initialize buffer
             readPos = 6; // Set readPos to 0
             //WriteInt(_id);
-            buffer.Add((byte)(0));
-            buffer.Add((byte)(0));
-            buffer.Add((byte)(0));
-            buffer.Add((byte)(0));
+            //buffer.Add((byte)(0));
+            //buffer.Add((byte)(0));
+            //buffer.Add((byte)(0));
+            //buffer.Add((byte)(0));
             buffer.Add((byte)(_id));
 
         }
@@ -68,7 +68,7 @@ namespace Shared.Network
         
         public void WriteLength()
         {
-            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
+            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count - 6)); // Insert the byte length of the packet at the very beginning
         }
 
         

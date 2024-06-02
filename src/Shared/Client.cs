@@ -31,6 +31,7 @@ namespace Shared
         //private static ManualResetEvent receiveDone = new ManualResetEvent(false);
 
         protected string name = "Base Client";
+        protected string address = "127.0.0.1";
         protected ushort port = 13008;
         int retryIntervalMilliseconds = 3000;
         Socket client;
@@ -96,7 +97,7 @@ namespace Shared
                 // Establish the remote endpoint for the socket.
                 // The name of the 
                 // remote device is "host.contoso.com".
-                IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+                IPAddress ipAddress = IPAddress.Parse(address);
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.

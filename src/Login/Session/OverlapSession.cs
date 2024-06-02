@@ -26,7 +26,7 @@ namespace Login.Session
                
                 LogFactory.GetLog(server.Name).LogInfo($"dumping packet opcode {packet.protocolID}.");
                 //LogFactory.GetLog(server.Name).LogInfo($"\n{NetworkUtil.DumpPacket(buffer, length)}");
-                int opcode = packet.protocolID;
+                /*int opcode = packet.protocolID;
                 if(opcode == 0)
                 {
                     SendRaw(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00 });
@@ -42,8 +42,8 @@ namespace Login.Session
                     LogFactory.GetLog(server.Name).LogInfo($"User serial {packet.ReadInt()}.");
                     LogFactory.GetLog(server.Name).LogInfo($"Server Id {packet.ReadInt()}.");
                     SendRaw(new byte[] { 0x04, 0x00, 0x00, 0x00, 0x22, 0x00, 0x01, 0x00, 0x00, 0x00 });
-
-                }
+                
+                }*/
                 base.OnRun(packet);
             }
             catch (Exception e)

@@ -17,11 +17,11 @@ namespace Game
             try
             {
                 GameServer server = new GameServer(args);
-                LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the game server with collected settings..");
+                //LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the game server with collected settings..");
                 server.Start();
-                LoginServer server2 = new LoginServer(args);
-                LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the login server session..");
-                server2.Start();
+                //LoginServer server2 = new LoginServer(args);
+               // LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the login server session..");
+                //server2.Start();
                 //MsgServer test = new MsgServer(args);
                 //LogFactory.GetLog("GameServer:Loader").LogInfo("Starting the login server session..");
                 //test.Start();

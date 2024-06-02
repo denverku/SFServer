@@ -13,13 +13,14 @@ namespace Game
 {
     public class GameServer : Server
     {
-        public int ChannelsCount = 5;
+        
         public GameServer(string[] args) : base(args)
         {
             //int id = int.Parse(args[0]);
             name = "GameServeeer";
             maxConnections = 5;
             port = 27231;
+            //port = 27931; //th
             //type = ServerType.Game;
             //network = new GameNetwork();
             RegisterDefaultSchedulers();

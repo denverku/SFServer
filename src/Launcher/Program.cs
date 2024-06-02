@@ -13,17 +13,18 @@ namespace HGWC {
             LogFactory.Initalize();
             LogFactory.OnWrite += Logger.LogFactory_ConsoleWrite;
             UserServer server = new UserServer(args);
-            LoginSessionServer server2 = new LoginSessionServer(args);
+           // LoginSessionServer server2 = new LoginSessionServer(args);
             try
             {
                 server.Start();
-                server2.Start();
+                //server2.Start();
 
             }
             catch (Exception e)
             {
                 LogFactory.GetLog($"{RootName}:Loader").LogError(e.Message);
             }
+            
         }
     }
 }

@@ -14,11 +14,13 @@ namespace Login
         public LauncherServerSession(string[] args) : base(args)
         {
             name = "Launcher Session Client";
-            port = 37240;
+            address = "61.90.203.22";
+            port = 27935;
         }
 
         public override void OnConnected(Socket socket)
         {
+            //Send(new byte[] {0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00,0xcd, 0xfe, 0x0b, 0x00});
         }
 
         public override void OnReceive(byte[] buff, int bytesRead)
@@ -27,9 +29,9 @@ namespace Login
             {
                 int protocolID = BitConverter.ToUInt16(buff, 4);
                 ushort test = BitConverter.ToUInt16(buff, 6);
-                //LogFactory.GetLog(name).LogInfo($"dumping packet proto {protocolID}.");
+                LogFactory.GetLog(name).LogInfo($"dumping packet proto {protocolID}.");
                // LogFactory.GetLog(name).LogInfo($"dumping data {test}.");
-               // LogFactory.GetLog(name).LogInfo($"\n{NetworkUtil.DumpPacket(buff, bytesRead)}");
+                LogFactory.GetLog(name).LogInfo($"\n{NetworkUtil.DumpPacket(buff, bytesRead)}");
                 switch (protocolID)
                 {
                     case 1: // 

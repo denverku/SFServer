@@ -9,7 +9,7 @@ namespace Shared.Util.Log {
             //Console.ForegroundColor = ConsoleColor.White;
             //Console.Write("[{0}] ", DateTime.Now);
 
-            switch (e.Type)
+            /*switch (e.Type)
             {
                 case LogType.Information:
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -26,10 +26,10 @@ namespace Shared.Util.Log {
                 case LogType.Fatal:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
-            }
+            }*/
             Console.Write("<{0}>", e.Name);
 
-            Console.ForegroundColor = ConsoleColor.Gray;
+            //Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(": {0}", e.Message);
         }
     }

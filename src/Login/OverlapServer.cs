@@ -18,7 +18,8 @@ namespace Login
         {
             name = "OverlapServer";
             //type = ServerType.Authentication;
-            port = 28965;
+            //port = 28965;
+            port = 27935;
             maxConnections = 5;
             //network = new LoginNetwork();
             base.RegisterDefaultSchedulers();

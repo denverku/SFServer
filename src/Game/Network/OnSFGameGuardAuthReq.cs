@@ -14,8 +14,7 @@ namespace Game.Network
 
         public void Handle(Packet packet, Shared.Session.Session session)
         {
-            session.SendRaw(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x67, 0x00, 0x01 });
-
+            //session.SendRaw(new byte[] { 0x01, 0x00, 0x00, 0x00, 0x67, 0x00, 0x01 });
         }
 
 

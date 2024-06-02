@@ -17,10 +17,10 @@ namespace Login
             GameServerSession gameServerSession = new GameServerSession(args);
             try
             {
-                server.Start();
+                //server.Start();
                 server2.Start();
                 launcherServerSession.Start();
-                gameServerSession.Start();
+                //gameServerSession.Start();
             }
             catch (Exception e)
             {

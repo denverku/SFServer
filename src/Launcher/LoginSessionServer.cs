@@ -16,6 +16,7 @@ namespace Launcher
             name = "LoginSession Server";
             //type = ServerType.Authentication;
             port = 37240;
+
             maxConnections = 5;
             //network = new LoginNetwork();
             base.RegisterDefaultSchedulers();

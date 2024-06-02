@@ -1,21 +1,19 @@
-﻿using System;
+﻿using Session.Session;
+using Shared;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
-using Session.Session;
-using Shared;
-using Shared.Enum;
 
 namespace Session
 {
-    internal class SessionServer : Server
+    internal class TestUDPServer : Server
     {
-        public SessionServer(string[] args) : base(args)
+        public TestUDPServer(string[] args) : base(args)
         {
-            name = "Session Server";
-            //type = ServerType.Authentication;
-            port = 27230; //def
-            //port = 27930; //th
+            name = "UDP Server";
+            
+            port = 27935;
             maxConnections = 5;
             //network = new LoginNetwork();
             base.RegisterDefaultSchedulers();
