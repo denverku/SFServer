@@ -11,11 +11,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Shared\Shared.csproj" />
+      <Compile Remove="Session\Handle\**" />
+      <EmbeddedResource Remove="Session\Handle\**" />
+      <None Remove="Session\Handle\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Session\Handle\" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

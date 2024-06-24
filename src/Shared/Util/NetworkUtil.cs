@@ -72,7 +72,11 @@ namespace Shared.Util {
 
             return builder.Remove(builder.Length - 1, 1).ToString();
         }
-
+        
+        public static string ByteToString(byte buff)
+        {
+            return buff.ToString("X2");
+        }
         /*public static string DumpPacket(byte[] packet) {
             var DataStr = "";
             var PacketLength = (ushort) packet.Length;

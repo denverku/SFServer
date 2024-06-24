@@ -24,28 +24,27 @@ namespace Shared.Network
         public Packet()
         {
             buffer = new List<byte>(); // Initialize buffer
-            readPos = 6; // Set readPos to 0
+            readPos = 8; // Set readPos to 0
         }
 
         
         public Packet(int _id)
         {
             buffer = new List<byte>(); // Initialize buffer
-            readPos = 6; // Set readPos to 0
+            readPos = 8; // Set readPos to 0
             //WriteInt(_id);
-            //buffer.Add((byte)(0));
-            //buffer.Add((byte)(0));
-            //buffer.Add((byte)(0));
-            //buffer.Add((byte)(0));
+            buffer.Add(0x44);
+            buffer.Add(0x46);
+            buffer.Add((byte)(0));
+            buffer.Add((byte)(0));
             buffer.Add((byte)(_id));
 
         }
-
         
         public Packet(byte[] _data)
         {
             buffer = new List<byte>(); // Initialize buffer
-            readPos = 6; // Set readPos to 0
+            readPos = 8; // Set readPos to 0
             SetBytes(_data);
         }
 
@@ -62,13 +61,43 @@ namespace Shared.Network
         {
             Write(_data);
             readableBuffer = buffer.ToArray();
-            protocolID = BitConverter.ToUInt16(readableBuffer, 4);
+            //byte[] head = new byte[] { readableBuffer[6], readableBuffer[7] };
+            protocolID = GetProtocolID(readableBuffer);
+            //protocolID = BitConverter.ToUInt16(readableBuffer, 6) + BitConverter.ToUInt16(readableBuffer, 7);
+            //byte[] opcode1 = new byte[] { readableBuffer[6], readableBuffer[7] };
+            //UInt16 opcode = BitConverter.ToUInt16(opcode1, 0);
         }
 
-        
+        private int GetProtocolID(byte[] readableBuffer)
+        {
+            int protocolID = 0;
+
+            // Check if the buffer has enough data to read protocolID
+            try
+            {
+                if (readableBuffer.Length >= 8)
+                {
+                    // Extract bytes from positions 6 and 7 and combine them to get protocolID
+                    protocolID  = (readableBuffer[7] << 8) | readableBuffer[6];
+                }
+                else
+                {
+                    // Handle the case when buffer size is smaller than expected
+                    // You can log a warning or take appropriate action here
+                    protocolID = BitConverter.ToUInt16(readableBuffer, 6);
+                }
+            }catch(Exception e)
+            {
+                protocolID = BitConverter.ToUInt16(readableBuffer, 6);
+            }
+
+            return protocolID;
+        }
+
+
         public void WriteLength()
         {
-            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count - 6)); // Insert the byte length of the packet at the very beginning
+            buffer.InsertRange(2, BitConverter.GetBytes(buffer.Count - 4)); // Insert the byte length of the packet at the very beginning
         }
 
         
@@ -90,7 +119,6 @@ namespace Shared.Network
             return buffer.Count; // Return the length of buffer
         }
 
-        
         public int UnreadLength()
         {
             return Length() - readPos; // Return the remaining length (unread)
@@ -103,7 +131,7 @@ namespace Shared.Network
             {
                 buffer.Clear(); // Clear buffer
                 readableBuffer = null;
-                readPos = 6; // Reset readPos
+                readPos = 8; // Reset readPos
             }
             else
             {

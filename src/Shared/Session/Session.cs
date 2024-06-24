@@ -20,7 +20,7 @@ namespace Shared.Session
         protected NetworkStream NetworkStream;
 
         protected Queue<Packet> _packetQueue = new Queue<Packet>(10);
-        protected int MAX_BUFFER_SIZE = 1024 * 4;
+        protected int MAX_BUFFER_SIZE = 8192;//1024 * 4;
         protected int TIMEOUT_VALUE = 120;
 
         protected string name = "Base Session";
@@ -60,14 +60,15 @@ namespace Shared.Session
         protected virtual void TryReadPacket()
         {
             byte[] buffer = new byte[MAX_BUFFER_SIZE];
-            NetworkStream.BeginRead(buffer, 0, buffer.Length, OnReceiveCallback, buffer);
+            //NetworkStream.BeginRead(buffer, 0, buffer.Length, OnReceiveCallback, buffer);
+            client.GetStream().BeginRead(buffer, 0, buffer.Length, OnReceiveCallback, buffer);
         }
 
         private void OnReceiveCallback(IAsyncResult ar)
         {
             try
             {
-                if (client.Client.Connected)
+                /*if (client.Client.Connected)
                 {
                     int length = NetworkStream.EndRead(ar);
                     if (length > 0)
@@ -77,7 +78,18 @@ namespace Shared.Session
                         Packet packet = new Packet(buffer);
                         OnRun(packet);
                     }
+                }*/
+                if (client.Client.Connected)
+            {
+                int length = client.GetStream().EndRead(ar);
+                if (length > 0)
+                {
+                    byte[] buffer = new byte[length];
+                    Array.Copy((byte[])ar.AsyncState ?? throw new InvalidOperationException(), 0, buffer, 0, length);
+                    Packet packet = new Packet(buffer);
+                    OnRun(packet);
                 }
+            }
             }
             catch (Exception e)
             {
@@ -87,45 +99,11 @@ namespace Shared.Session
 
         public void SendPacket(Packet packet)
         {
-            try
-            {
-                ushort protocolID = BitConverter.ToUInt16(packet.readableBuffer, 4);
-                //ushort data = BitConverter.ToUInt16(packet.readableBuffer, 6);
-                LogFactory.GetLog(server.Name).LogInfo($"Sending protocolID {protocolID}.");
-                //LogFactory.GetLog(server.Name).LogInfo($"Sending data {data}");
-            }catch(Exception e)
-            {
-
-            }
-           /* int startIndex = 6;
-
-            // Reading ushort values from byte array starting at startIndex
-            while (startIndex + 1 < packet.Buffer.Length)
-            {
-                ushort value = BitConverter.ToUInt16(packet.Buffer, startIndex);
-                Console.WriteLine("Value of ushort at index " + startIndex + ": " + value);
-                startIndex += 2; // Incrementing by 2 bytes to read the next ushort
-            }*/
             if (packet != null) _packetQueue.Enqueue(packet);
         }
 
         public void SendRaw(byte[] buff)
         {
-
-            //Packet packet = new Packet(buff);
-
-            //SendPacket(packet);
-            try
-            {
-                ushort protocolID = BitConverter.ToUInt16(buff, 4);
-                //ushort data = BitConverter.ToUInt16(packet.readableBuffer, 6);
-                LogFactory.GetLog(server.Name).LogInfo($"Sending protocolID {protocolID}.");
-                //LogFactory.GetLog(server.Name).LogInfo($"Sending data {data}");
-            }
-            catch (Exception e)
-            {
-
-            }
             Packet packet = new Packet(buff);
             if (packet != null) _packetQueue.Enqueue(packet);
         }
@@ -164,6 +142,7 @@ namespace Shared.Session
             if (ar.AsyncState is Packet packet)
             {
                 NetworkStream.EndWrite(ar);
+                packet.Dump();
                 LogFactory.GetLog(server.Name).LogInfo($"Packet Sent");
                 //LogFactory.GetLog(server.Name).LogInfo($"Packet Sent [{packet.Pid().ToString()}] [{packet.Buffer.Length}] to [{id}].");
                 OnFinishPacketSent(packet);

@@ -11,13 +11,13 @@ namespace Session
             Console.Title = RootName;
             LogFactory.Initalize();
             LogFactory.OnWrite += Logger.LogFactory_ConsoleWrite;
-            TestUDPServer tserver = new TestUDPServer(args);
+            //TestUDPServer tserver = new TestUDPServer(args);
             SessionServer server = new SessionServer(args);
             //LoginClient loginClient = new LoginClient(args);
             try
             {
                 server.Start();
-                tserver.Start();
+               // tserver.Start();
                 //loginClient.Start();
             }
             catch (Exception e)

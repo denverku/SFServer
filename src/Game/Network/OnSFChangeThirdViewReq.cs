@@ -9,7 +9,7 @@ namespace Game.Network
     {
         public int ProtocolId()
         {
-            return 1304;
+            return 7104;
         }
 
         public void Handle(Packet packet, Shared.Session.Session session)

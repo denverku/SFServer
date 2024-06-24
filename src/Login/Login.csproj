@@ -11,11 +11,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Shared\Shared.csproj" />
+      <Compile Remove="Network\**" />
+      <EmbeddedResource Remove="Network\**" />
+      <None Remove="Network\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Network\" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

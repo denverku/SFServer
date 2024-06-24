@@ -14,8 +14,8 @@ namespace Session
         {
             name = "Session Server";
             //type = ServerType.Authentication;
-            port = 27230; //def
-            //port = 27930; //th
+            //port = 27230; //def
+            port = 27930; //th
             maxConnections = 5;
             //network = new LoginNetwork();
             base.RegisterDefaultSchedulers();

@@ -9,12 +9,21 @@ namespace Game.Network
     {
         public int ProtocolId()
         {
-            return 1310;
+            return 7110;
         }
 
         public void Handle(Packet packet, Shared.Session.Session session)
         {
-            // session.SendRaw(new byte[] { 0x10, 0x00, 0x00, 0x00, 0x6f, 0x00, 0x76, 0x6d, 0x6d, 0x13, 0x74, 0xc0, 0x30, 0x20, 0xcf, 0x39, 0x08, 0xa3, 0x43, 0x7a, 0xdf, 0x1a });
+            Packet victory = new Packet();
+            victory.WriteByte(0x44);
+            victory.WriteByte(0x46);
+            victory.WriteByte(0xc7);
+            victory.WriteByte(0x1b);
+            victory.WriteByte(packet.ReadByte());
+            
+            victory.WriteLength();
+            session.SendPacket(victory);
+            //session.SendRaw(new byte[] { 0x44, 0x46, 0x01, 0x00, 0x00, 0x00, 0xc7, 0x1b, 0x14 });
         }
 
 

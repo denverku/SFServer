@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Game.Network
 {
-    internal class OnSFChangeGameMapReq : BaseNetwork
+    internal class OnSFGameReadyReq : BaseNetwork
     {
         public int ProtocolId()
         {
@@ -19,7 +19,7 @@ namespace Game.Network
             map.WriteByte(0x46);
             map.WriteByte(0x41);
             map.WriteByte(0x1b);
-            map.WriteByte(packet.ReadByte()); // MAP
+            map.WriteByte(packet.ReadByte());
             map.WriteByte(0x00);
             map.WriteLength();
             session.SendPacket(map);
